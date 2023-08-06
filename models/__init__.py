@@ -1,4 +1,4 @@
-#!/busr/bin/python3
+#!/usr/bin/python3
 """module will allow you to change storage type directly
 by using an environment variable"""
 
