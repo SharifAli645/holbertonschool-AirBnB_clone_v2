@@ -4,7 +4,7 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Column
 from sqlalchemy import String
 from sqlalchemy.orm import relationship
-
+from os import getenv
 
 if getenv("HBNB_TYPE_STORAGE") == "db":
     class State(BaseModel, Base):
