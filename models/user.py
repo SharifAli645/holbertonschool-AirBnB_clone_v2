@@ -15,13 +15,13 @@ if getenv("HBN_TYPE_STORAGE") == "db":
         first_name = Column(String(128), nullable=False)
         last_name = Column(String(128), nullable=False)
 
-        places = relationship("Place", backref="user", cascade="all,
-                              delete-orphan")
-        reviews = relationship("Review", backref="user", cascade="all,
-                               delete-orphan")
+        places = relationship("Place", backref="user",
+                              cascade="all, delete-orphan")
+        reviews = relationship("Review", backref="user",
+                               cascade="all, delete-orphan")
 
 elif getenv("HBN_TYPE_STORAGE") != "db":
-    class User(Basemodel):
+    class User(BaseModel):
         """This class defines a user by various attributes"""
         email = ""
         password = ""
