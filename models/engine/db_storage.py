@@ -27,8 +27,6 @@ class DBStorage:
         self.__engine = create_engine("mysql+mysqldb://{}:{}@{}/{}".
                                       format(user, pswd, host, d_bs),
                                       pool_pre_ping=True)
-        if envr == "test":
-            Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
         """query on the current database session"""
