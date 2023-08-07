@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Module that defines a class that works an engine"""
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.orm import sessionmaker, scoped_session, relationship
 from os import getenv
 from models.amenity import Amenity
 from models.base_model import BaseModel, Base
