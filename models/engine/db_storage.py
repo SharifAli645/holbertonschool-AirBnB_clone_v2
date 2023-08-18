@@ -3,14 +3,13 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session, relationship
 from os import getenv
-from models.amenity import Amenity
 from models.base_model import BaseModel, Base
-from models.city import City
-from models.place import Place
-from models.review import Review
 from models.state import State
 from models.user import User
-
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
+from models.place import Place
 
 class DBStorage:
     """Class that defines an engine"""
@@ -48,7 +47,7 @@ class DBStorage:
     def delete(self, obj=None):
         """delete from the current database session obj"""
         if obj is not None:
-            self.__session.delete(obj)
+            self.__session.query(obj.__class__).filter_by(id=obj.id).delete(synchronize_session=False)
 
     def reload(self):
         """create all tables in the database and the session"""
