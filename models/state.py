@@ -4,7 +4,6 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Column
 from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import relationship
-from models.city import City
 from os import getenv
 
 if getenv("HBNB_TYPE_STORAGE") == "db":
@@ -18,3 +17,11 @@ else:
     class State(BaseModel):
         """ State class """
         name = ""
+
+        @property
+        def cities(self):
+            from models import storage
+            cities = storage.all(City)
+            city_l = [obj for obj in cities.values()
+                      if obj.state_id == self.id]
+            return city_l

@@ -10,15 +10,16 @@ if getenv("HBNB_TYPE_STORAGE") == "db":
 
     place_amenity = Table('place_amenity', Base.metadata,
                           Column('place_id', String(60),
-                                ForeignKey('places.id'),
-                                nullable=True, primary_key=True),
-                          Column('amenity_id', ForeignKey("amenities.id")
-                                 , primary_key=True, nullable=False))
+                                 ForeignKey('places.id'),
+                                 nullable=False, primary_key=True),
+                          Column('amenity_id', ForeignKey('amenities.id'),
+                                 primary_key=True, nullable=False))
+
     class Place(BaseModel, Base):
         """A place to stay"""
         __tablename__ = "places"
-        city_id = Column(String(60), ForeignKey("cities.id"), nullable=False)
-        user_id = Column(String(60), ForeignKey("users.id"), nullable=False)
+        city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
+        user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
         name = Column(String(128), nullable=False)
         description = Column(String(1024), nullable=True)
         number_rooms = Column(Integer, nullable=False, default=0)
@@ -28,10 +29,11 @@ if getenv("HBNB_TYPE_STORAGE") == "db":
         latitude = Column(Float, nullable=True)
         longitude = Column(Float, nullable=True)
 
-        reviews = relationship("Review", backref="place", cascade="all,\
-                               delete-orphan")
-        amenities = relationship("Amenity", back_populates=
-                                 "place_amenities", viewonly=False,
+        reviews = relationship("Review", backref="place",
+                               cascade="all, delete-orphan")
+        amenities = relationship("Amenity",
+                                 back_populates="place_amenities",
+                                 viewonly=False,
                                  secondary=place_amenity)
 else:
     class Place(BaseModel):
@@ -47,3 +49,29 @@ else:
         latitude = 0.0
         longitude = 0.0
         amenity_ids = []
+
+        @property
+        def reviews(self):
+            from models import storage
+            from models.review import Review
+            place = storage.all(Place)
+            review = storage.all(Review)
+            places_id = [obj.id for obj in place.values()]
+            review_list = [obj for obj in review.values()
+                           if obj.place_id in places_id]
+            return review_list
+
+        @property
+        def amenities(self):
+            from models.review import Amenity
+            amenity = storage.all(Amenity)
+            amenity_list = [obj for obj in amenity.values()
+                            if obj.id in amenity_ids]
+            return amenity_list
+
+        @amenities.setter
+        def amenities(self, obj):
+            if obj.__class__.__name__ == "Amenity":
+                amenity_ids.append(obj.id)
+            else:
+                pass

@@ -20,7 +20,7 @@ if getenv("HBN_TYPE_STORAGE") == "db":
         reviews = relationship("Review", backref="user",
                                cascade="all, delete-orphan")
 
-elif getenv("HBN_TYPE_STORAGE") != "db":
+else:
     class User(BaseModel):
         """This class defines a user by various attributes"""
         email = ""
