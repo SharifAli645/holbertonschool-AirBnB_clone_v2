@@ -12,12 +12,13 @@ if getenv("HBNB_TYPE_STORAGE") == "db":
                           Column('place_id', String(60),
                                  ForeignKey('places.id'),
                                  nullable=False, primary_key=True),
-                          Column('amenity_id', ForeignKey('amenities.id'),
+                          Column('amenity_id', String(60),
+                                 ForeignKey('amenities.id'),
                                  primary_key=True, nullable=False))
 
     class Place(BaseModel, Base):
         """A place to stay"""
-        __tablename__ = "places"
+        __tablename__ = 'places'
         city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
         user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
         name = Column(String(128), nullable=False)
@@ -32,9 +33,10 @@ if getenv("HBNB_TYPE_STORAGE") == "db":
         reviews = relationship("Review", backref="place",
                                cascade="all, delete-orphan")
         amenities = relationship("Amenity",
+                                 secondary="place_amenity",
                                  back_populates="place_amenities",
-                                 viewonly=False,
-                                 secondary=place_amenity)
+                                 viewonly=False)
+
 else:
     class Place(BaseModel):
         """ A place to stay """
