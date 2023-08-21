@@ -3,13 +3,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session, relationship
 from os import getenv
-from models.base_model import BaseModel, Base
-from models.state import State
-from models.user import User
-from models.city import City
-from models.amenity import Amenity
-from models.review import Review
-from models.place import Place
+
 
 class DBStorage:
     """Class that defines an engine"""
@@ -51,8 +45,19 @@ class DBStorage:
 
     def reload(self):
         """create all tables in the database and the session"""
+        from models.base_model import BaseModel, Base
+        from models.user import User
+        from models.place import Place
+        from models.state import State
+        from models.city import City
+        from models.amenity import Amenity
+        from models.review import Review
+
         Base.metadata.create_all(self.__engine)
         session_factory = sessionmaker(bind=self.__engine,
                                        expire_on_commit=False)
         Session = scoped_session(session_factory)
         self.__session = Session()
+
+    def close(self):
+        self.__session.close()
