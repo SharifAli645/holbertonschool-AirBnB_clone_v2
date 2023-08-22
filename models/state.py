@@ -20,6 +20,7 @@ else:
 
         @property
         def cities(self):
+            from models.city import City
             from models import storage
             cities = storage.all(City)
             city_l = [obj for obj in cities.values()
