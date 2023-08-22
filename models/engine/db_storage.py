@@ -41,7 +41,8 @@ class DBStorage:
     def delete(self, obj=None):
         """delete from the current database session obj"""
         if obj is not None:
-            data = self.__session.query(obj.__class__).filter_by(id=obj.id).first()
+            cl = obj.__class__
+            data = self.__session.query(cl).filter_by(id=obj.id).first()
             self.__session.delete(data)
 
     def reload(self):
