@@ -134,6 +134,15 @@ class HBNBCommand(cmd.Cmd):
         new_instance = HBNBCommand.classes[cl_name]()
         new_instance.__dict__.update(d_dict)
 
+        from os import getenv
+        from models.engine.file_storage import FileStorage
+
+        if getenv("HBNB_TYPE_STORAGE") == 'db':
+            stor = FileStorage()
+            stor.reload()
+            stor.new(new_instance)
+            stor.save()
+
         storage.new(new_instance)
         storage.save()
         print(new_instance.id)
