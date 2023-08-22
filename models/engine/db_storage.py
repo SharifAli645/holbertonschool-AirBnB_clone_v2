@@ -41,7 +41,8 @@ class DBStorage:
     def delete(self, obj=None):
         """delete from the current database session obj"""
         if obj is not None:
-            self.__session.query(obj.__class__).filter_by(id=obj.id).delete(synchronize_session=False)
+            data = self.__session.query(obj.__class__).filter_by(id=obj.id).first()
+            self.__session.delete(data)
 
     def reload(self):
         """create all tables in the database and the session"""
@@ -61,4 +62,4 @@ class DBStorage:
 
     def close(self):
         """Call remove method on the private session attribute"""
-        self.__session.remove()
+        self.__session.close()
