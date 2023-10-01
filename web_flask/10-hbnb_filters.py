@@ -17,7 +17,7 @@ def states():
     return render_template("10-hbnb_filters.html",
                            data_state=storage.all(State),
                            data_city=storage.all(City),
-                           data_ame=storage.all(Amenity))
+                           data_ameni=storage.all(Amenity))
 
 
 @app.teardown_appcontext
